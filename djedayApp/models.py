@@ -61,8 +61,6 @@ class Candidates(models.Model):
     # Определяем список кандидатов, прошедщих тест по ид джедаев
     def spisok(self, d_id):
         master = Djeday.objects.get(id=d_id)
-        print(master)
-
         if master:
            pl_id = master.planet_id
            if self.planet.id == pl_id and self.otveti_set.all().exists() and self.master is None:
