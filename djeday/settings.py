@@ -31,7 +31,7 @@ SECRET_KEY = 'z+w^2oa0+(mqa9&&gwmaw6@mljnyu8sjxtabiop!#hw#gaf4##'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['quiet-savannah-39505.herokuapp.com']
 
 
 # Application definition
