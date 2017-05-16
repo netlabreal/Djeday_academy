@@ -19,7 +19,7 @@
                                       <tr>
                                       {% for f in m %}
                                            <td>{{ f.name }}</td>
-                                           <td>{{ f.planet }}</td>
+                                           <td>{{ f }}</td>
                                            <td>{{ f.kol_padavan }}</td>
                                       {% endfor %}
                                       </tr>
@@ -41,7 +41,7 @@
                                       {% for f in m %}
                                           {% if f.kol_padavan > 1 %}
                                            <td>{{ f.name }}</td>
-                                           <td>{{ f.planet }}</td>
+                                           <td>{{ f }}</td>
                                            <td>{{ f.kol_padavan }}</td>
                                           {% endif %}
                                       {% endfor %}
