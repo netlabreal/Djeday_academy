@@ -1,0 +1,13 @@
+#real{
+    float: left;
+    margin-top:45px;
+    margin-left: 5%;
+    width: 90%;
+}
+#r_cap{
+    margin-left: 25%;
+    width: 50%;
+}
+.error{
+    background-color: red;
+}

@@ -1,0 +1,369 @@
+{% extends "base.html" %}
+
+
+    {% block title %}Академия джедаев.{% endblock %}
+
+    {% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 " id="tmp"><input type="hidden" id="new_user" value="">
+
+                <a href="{% url 'reports' %}" target="_blank"><span class="label label-info">Вывод всех джедаев</span></a>
+            </div>
+
+            <div class="col-md-6 ">
+
+                <div class="panel panel-default">
+                  <div class="panel-heading" style="text-align: center">Выбор</div>
+                  <div class="panel-body">
+                      <button type="button" class="btn btn-success" id="djed_button">Для джедаев</button>
+                      <button type="button" class="btn btn-info" style="float: right" id="cand_button">Для кандидатов</button>
+                  </div>
+                </div>
+
+                <div class="panel panel-default" id="data_candidate" style="margin-top: 20px;">
+                  <div class="panel-heading" style="text-align: center">Введите данные кандидата</div>
+                  <div class="panel-body">
+
+                        <form action="" method="post" id="ajaxform">
+                        <div class="input-group" style="width: 100%; padding-bottom: 10px;">
+                            <input type="text" name="name" placeholder="Введите Ваше имя" class="form-control input-sm">
+                        </div>
+                        <div class="input-group" style="width: 100%; padding-bottom: 10px;">
+                            <input type="text" name="age" placeholder="Введите Ваш возраст" class="form-control input-sm">
+                        </div>
+                        <div class="input-group" style="width: 100%; padding-bottom: 10px;">
+                            <input type="text" name="email" placeholder="Введите Ваш email" class="form-control input-sm">
+                        </div>
+
+                        <div class="input-group" style="padding-bottom: 10px;">
+							<span class="input-group-addon">Планета</span>
+							<select id="sel_planet" name="planet" class="form-control input-sm">
+							</select>
+                        </div>
+
+                        <button type="button" id="next" class="btn btn-primary"  style="float: right">Далее</button>
+                        </form>
+                      <div id="messages">
+
+                      </div>
+
+                  </div>
+                </div>
+
+
+                <div class="panel panel-default" id="data_djeday" style="margin-top: 20px;">
+                  <div class="panel-heading" style="text-align: center">Выберите джедая</div>
+                  <div class="panel-body">
+
+                            <div class="input-group" style="padding-bottom: 10px;">
+                                <span class="input-group-addon">Джедай</span>
+                                <select id="sel_djeday" name="djeday" class="form-control input-sm">
+                                </select>
+                            </div>
+
+                            <!--<button type="button" id="next_djeday" class="btn btn-primary"  style="float: right">Далее</button>-->
+
+                  </div>
+                </div>
+
+
+                <div class="panel panel-default" id="data_voprosi">
+                  <div class="panel-heading" style="text-align: center">Вопросы для кандидата</div>
+                  <div class="panel-body" >
+                      <div id="for_voprosi">
+
+                      </div>
+
+                      <button type="button" class="btn btn-primary" id="q_next" style="float: right">Далее</button>
+                </div>
+
+
+            </div>
+
+
+                <div class="panel panel-default" id="Candidates">
+                  <div class="panel-heading" style="text-align: center">Кандидаты</div>
+                  <div class="panel-body" >
+                        <table class="table">
+                            <thead><tr><th>№</th><th>Имя</th><th>Возвраст</th><th>Email</th><th></th></tr></thead>
+                            <tbody id="data_for_djeday">
+
+                            </tbody>
+                        </table>
+
+                      <div id="otcheti">
+
+
+                      </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <div class="col-md-3"></div>
+
+        </div>
+    </div>
+    {% endblock %}
+
+
+{% block jquery %}
+    // 1 - djedays
+    // 2 - candidates
+    // 3 - voprosi
+    var param = 0;
+
+
+    //***************************************//
+    $('#new_user').val('');
+
+    planets = $('#sel_planet');
+    djedays = $('#sel_djeday');
+
+    candidate = $('#data_candidate');
+    candidates = $('#Candidates');
+
+    djeday = $('#data_djeday');
+    voprosi = $('#data_voprosi');
+    dat = $('#data_for_djeday');
+
+    candidate.hide();candidates.hide();djeday.hide();voprosi.hide();
+    //***************************************//
+    //Выбор джедая
+    $('#sel_djeday').change(function(){
+        dat.html('');if($('#sel_djeday').val()!=0){allCandidates($('#sel_djeday').val());candidates.show('slow');}else{candidates.hide('slow');}
+    });
+    //***************************************//
+    // Обработчик на показ теста кандидата
+    $('body').on('click', '#test',function(){
+        window.open( "{% url 'main_page' %}"+$(this).parent().parent().find("td:eq(0)").text()+"/" );
+    });
+    //***************************************//
+    // Обработчик зачисления в падаваны
+    $('body').on('click', '#podavan',function(){
+        if($('#sel_djeday').val()!=0){vPodavan($(this).parent().parent().find("td:eq(0)").text(), $('#sel_djeday').val());}
+    });
+    //***************************************//
+    //
+    //***************************************//
+     function showError(container) {
+        container.className = 'error';
+    }
+    //***************************************//
+    function resetError(container) {
+      container.className = 'elem';
+    }
+    //***************************************//
+    function reset(container) {
+      container.value = null;
+    }
+    //***************************************//
+     function isValidEmailAddress(emailAddress) {
+        var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+        return pattern.test(emailAddress);
+    }
+    //***************************************//
+    function reset(container) {
+      container.value = null;
+    }
+    //***************************************//
+    function EmptyForm(form){
+        var er = 0;
+        var f_elems = form.elements;
+        dd  =1;
+    }
+    // Возврат всех планет
+    //***************************************//
+    function getPlanets()
+    {
+         planets.html('');
+         $.ajax({
+            type:'POST',
+            dataType: "json",
+            url:'{% url 'ajax_page' %}',
+            data: {'par':1},
+            success:function(data){
+                planets.append('<option value=0>---</option>');
+                $.each(data, function(key, val){
+					planets.append('<option value='+key+'>' +val+'</option>');
+				});
+            },
+            error:function(error){}
+         });
+    }
+    // Возврат всех мастеров
+    //***************************************//
+    function getDjedays()
+    {
+         djedays.html('');
+         $.ajax({
+            type:'POST',
+            dataType: "json",
+            url:'{% url 'ajax_page' %}',
+            data: {'par':2},
+            success:function(data){
+                djedays.append('<option value=0>---</option>');
+                $.each(data, function(key, val){
+					djedays.append('<option value='+key+'>' +val+'</option>');
+				});
+            },
+            error:function(error){}
+         });
+    }
+    // Возврат всех вопросов
+    //***************************************//
+    function getVoprosi()
+    {
+        $('#for_voprosi').html('');
+         $.ajax({
+            type:'POST',
+            dataType: "json",
+            url:'{% url 'ajax_page' %}',
+            data: {'par':3},
+            success:function(data){
+                $.each(data, function(key, val){
+                    $('#for_voprosi').append('<div class="alert alert-success">'+val+'</div>');
+                    $('#for_voprosi').append('<div class="input-group" style="padding-bottom: 10px;"><span class="input-group-addon">Ответ</span><select id="'+key+'" name="s" class="form-control input-sm"><option value="Да">Да</option><option value="Нет">Нет</option></select></div>');
+				});
+            },
+            error:function(error){}
+         });
+    }
+    // Внесение кандидата
+    //***************************************//
+    function new_candidate()
+    {
+         data_candidate = $('#ajaxform').serialize();
+         $.ajax({
+            type:'POST',
+            dataType: "json",
+            url:'{% url 'new_candidate' %}',
+            data: data_candidate,
+            success:function(data){
+                if(data.rez!=0)
+                {
+                    $('#messages').show();
+                    $('#messages').append('<h4><span class="label label-danger">Данные кандидата были успешно добавлены!</span></h4>');
+                    $('#messages').hide(3000, function(){
+                       $('#messages').html('');
+                    });
+                    $('#new_user').val(data.rez);
+                    $('#ajaxform')[0].reset();
+                    $('#data_candidate').hide();
+
+                    getVoprosi();
+                    voprosi.show('slow');
+                    $('#djed_button').prop("disabled", true);
+                    $('#cand_button').prop("disabled", true);
+                }
+                else
+                {
+                    $('#new_user').val('');
+                    $('#messages').show();
+                    $('#messages').append('<h4><span class="label label-danger">Произошла ошибка! Проверьте введенные данные.</span></h4>');
+                    $('#messages').hide(3000, function(){
+                        $('#messages').html('');
+                    });
+                }
+            },
+            error:function(error){}
+         });
+    }
+    // Вывод всех кандидатов, прошедших тест, по определенному мастеру
+    //***************************************//
+    function allCandidates($d_id)
+    {
+         $.ajax({
+            type:'POST',
+            dataType: "json",
+            url:'{% url 'ajax_page' %}',
+            data: {'par':4, 'djeday':$d_id},
+            success:function(data){
+                k = JSON.parse(data);
+                if (k.length>0){
+                    for(var i =0; i< k.length; i++)
+                    {
+                        dat.append('<tr><td>'+k[i].pk+'</td><td>'+k[i].fields["name"]+'</td><td>'+k[i].fields["age"]+'</td><td>'+k[i].fields["email"]+'</td><td><button class="btn btn-primary  btn-xs" id="test">тест</button></td><td><button class="btn btn-success  btn-xs" id="podavan">взять в падаваны</button></td></tr>');
+                    }
+
+                }
+            },
+            error:function(error){}
+         });
+    }
+    // Внести ответы на вопросы кандидата
+    //***************************************//
+    function insOtvet(d)
+    {
+         $.ajax({
+            type:'POST',
+            dataType: "json",
+            url:'{% url 'ins_otvet' %}',
+            data:  { result: JSON.stringify(d) },
+            success:function(data){
+                    $('#djed_button').prop("disabled", false);$('#cand_button').prop("disabled", false);
+                    Message('Ответы кандидата были успешно добавлены!');$('#new_user').val('');voprosi.hide();
+            },
+            error:function(error){}
+         });
+    }
+    // Перевод кандидата в падавана
+    //***************************************//
+    function vPodavan(cand, master)
+    {
+         $.ajax({
+            type:'POST',
+            dataType: "json",
+            url:'{% url 'ajax_page' %}',
+            data:  { 'par':5,'cand':cand, 'djed': master },
+            beforeSend: function(){
+                Message("Подождите! Идет отправка письма!");
+            },
+            success:function(data){
+                if(data.rez==1){dat.html('');allCandidates($('#sel_djeday').val());}
+                if(data.rez==2){Message("Нельзя взять больше трех кандидатов!");}
+            },
+            error:function(error){}
+         });
+    }
+    // Функция, выводящая сообщение
+    //***************************************//
+    function Message(mes){
+        $('div.al').detach();
+        var tmpl = '<div class="container al"><div class="col-sm-offset-4 col-sm-4"><div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">X</button><span>'+mes+'</span></div></div></div>';
+        $('body').append(tmpl);$('.al').fadeIn();
+        setTimeout(function(){$('.al').fadeOut();}, 1500);
+    };
+    // Интерфейс джедая
+    //***************************************//
+    $('#djed_button').click(function(){
+        candidates.hide('slow') ;
+        candidate.hide('slow') ;
+        if(param == 0 || param == 1){getDjedays();djeday.show('slow');param = 1;}
+        else{getDjedays();djeday.show('slow');param = 1;}
+    });
+    //***************************************//
+    $('#next').click(function(){
+        new_candidate();
+    });
+    //***************************************//
+    // Интерфейс кандидата
+    $('#cand_button').click(function(){
+        candidates.hide('slow') ;
+        $('#new_user').val('');
+        if(param == 0 || param == 2){getPlanets();candidate.show('slow') ;param = 2;}
+        else{djeday.hide('slow');getPlanets();candidate.show('slow') ;param = 2;}
+    });
+    //***************************************//
+    // Сохранение ответа
+    $('#q_next').click(function(){
+        hh = $('#for_voprosi').children('div.input-group').children('select');var res = []; tmp=[];
+        for (var i=0;i<hh.length;i++){var RowValue = { id:  hh[i].id, value:  hh[i].value, user: $('#new_user').val() };res.push(RowValue);}insOtvet(res);
+    });
+    //***************************************//
+
+{% endblock %}

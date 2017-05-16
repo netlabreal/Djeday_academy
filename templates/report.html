@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+
+    {% block title %}Академия джедаев.{% endblock %}
+
+    {% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 " id="tmp"><input type="hidden" id="new_user" value=""></div>
+            <div class="col-md-6 ">
+
+                <div class="panel panel-default">
+                  <div class="panel-heading" style="text-align: center">Тест кандидата {{ cand.name}}</div>
+                  <div class="panel-body">
+                     <table class="table">
+                         <thead><tr><th>Вопрос</th><th>Ответ</th></tr></thead>
+                             <tbody id="data_for_djeday">
+                                  {% for m in report%}
+                                      <tr>
+                                        <td>{{ m.vopros.naim}}</td>
+                                        <td>{{ m.otvet}}</td>
+                                      </tr>
+                                  {% endfor %}
+                             </tbody>
+                     </table>
+                  </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {% endblock %}
+
+
+{% block jquery %}
+{% endblock %}

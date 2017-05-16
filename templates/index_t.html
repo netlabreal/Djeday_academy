@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+
+    {% block title %}Академия джедаев.{% endblock %}
+
+    {% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 "></div>
+            <div class="col-md-6 ">
+
+                <div class="panel panel-default" id="real">
+                  <div class="panel-heading" style="text-align: center">Выбор</div>
+                  <div class="panel-body">
+                      <button type="button" class="btn btn-success" id="djed_button">Для джедаев</button>
+                      <button type="button" class="btn btn-info" style="float: right" id="cand_button">Для кандидатов</button>
+                  </div>
+                </div>
+
+
+
+
+                <div></div>
+
+
+                <div class="panel panel-default" id="data_candidate" style="margin-top: 20px;">
+                  <div class="panel-heading" style="text-align: center">Введите данные кандидата</div>
+                  <div class="panel-body">
+                        <div class="input-group">
+							<span class="input-group-addon">Квартира</span>
+							<select id="sel_kw" name="table1_length" aria-controls="table1" class="form-control input-sm">
+							    <option value="7">7</option><option value="10">10</option><option value="25">25</option><option value="50">50</option>
+							</select>
+                        </div>
+
+                        <div class="input-group">
+                            <input type="text" placeholder="Enter your name" class="form-control input-sm">
+                        </div>
+
+                        <button type="button" class="btn btn-primary"  style="float: right">Далее</button>
+
+                  </div>
+                </div>
+
+
+<!--                <div class="panel panel-default" id="real">
+                  <div class="panel-heading" style="text-align: center">Ответьте на вопросы</div>
+                  <div class="panel-body">
+
+<div class="panel-body">
+<div class="radio">
+        <label>
+          <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+          Первая опция&mdash;выбирайте его, если вам нравится этот пункт
+        </label>
+</div>
+<div class="radio">
+  <label>
+          <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+          Вторая опция - это несколько другое, и она отменяет выбор первой опции
+        </label>
+</div>
+</div>
+
+
+
+
+<div class="panel panel-default">
+  <div class="panel-body">
+      Q number 1
+  </div>
+
+  <ul class="list-group">
+    <li class="list-group-item">
+        <label>
+          <input type="radio" name="optionsRadios1" id="optionsRadios1" value="option1" checked>
+          Первая опция&mdash;выбирайте его, если вам нравится этот пункт
+        </label>
+    </li>
+  </ul>
+
+  <ul class="list-group">
+    <li class="list-group-item">        <label>
+          <input type="radio" name="optionsRadios1" id="optionsRadios1" value="option1" checked>
+          Первая опция&mdash;выбирайте его, если вам нравится этот пункт
+        </label>
+</li>
+  </ul>
+</div>-->
+
+
+<div class="panel panel-default">
+  <div class="panel-body">
+      Q number 1
+  </div>
+
+  <ul class="list-group">
+    <li class="list-group-item">
+        <label>
+          <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+          Первая опция&mdash;выбирайте его, если вам нравится этот пункт
+        </label>
+    </li>
+    <li class="list-group-item">        <label>
+          <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+          Первая опция&mdash;выбирайте его, если вам нравится этот пункт
+        </label>
+</li>
+  </ul>
+</div>
+
+
+
+
+                 <button type="button" class="btn btn-primary"  style="float: right">Далее</button>
+
+
+                  </div>
+                </div>
+
+
+
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+</div>
+    {% endblock %}
+
+
+{% block jquery %}
+
+
+    $('#djed_button').click(function(){
+       alert("djed");
+    });
+
+    $('#cand_button').click(function(){
+        $('#data_candidate').css("display","visible") ;
+    });
+
+{% endblock %}

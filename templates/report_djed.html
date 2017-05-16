@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+
+    {% block title %}Академия джедаев.{% endblock %}
+
+    {% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 " id="tmp"><input type="hidden" id="new_user" value=""></div>
+            <div class="col-md-6 ">
+
+                <div class="panel panel-default">
+                  <div class="panel-heading" style="text-align: center">Отчет 1 {{ cand.name}}</div>
+                  <div class="panel-body">
+                     <table class="table">
+                         <thead><tr><th>Джедай</th><th>Планета</th><th>Кол-во падаванов</th></tr></thead>
+                             <tbody id="data_for_djeday">
+                                  {% for m in kol%}
+                                      <tr>
+                                      {% for f in m %}
+                                           <td>{{ f.name }}</td>
+                                           <td>{{ f.planet }}</td>
+                                           <td>{{ f.kol_padavan }}</td>
+                                      {% endfor %}
+                                      </tr>
+                                  {% endfor %}
+                             </tbody>
+                     </table>
+                  </div>
+                </div>
+
+
+                <div class="panel panel-default">
+                  <div class="panel-heading" style="text-align: center">Отчет 2 {{ cand.name}}</div>
+                  <div class="panel-body">
+                     <table class="table">
+                         <thead><tr><th>Джедай</th><th>Планета</th><th>Кол-во падаванов</th></tr></thead>
+                             <tbody id="data_for_djeday">
+                                  {% for m in kol%}
+                                      <tr>
+                                      {% for f in m %}
+                                          {% if f.kol_padavan > 1 %}
+                                           <td>{{ f.name }}</td>
+                                           <td>{{ f.planet }}</td>
+                                           <td>{{ f.kol_padavan }}</td>
+                                          {% endif %}
+                                      {% endfor %}
+                                      </tr>
+                                  {% endfor %}
+                             </tbody>
+                     </table>
+                  </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+    {% endblock %}
+
+
+{% block jquery %}
+{% endblock %}
