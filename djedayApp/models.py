@@ -1,15 +1,16 @@
+#-*- coding: utf-8 -*-
 from django.db import models
 
 
-# таблица планета
+# table planet
 class Planet(models.Model):
     id = models.AutoField(primary_key=True) # id
     name = models.CharField(max_length=100) # palnet name
 
     class Meta:
         ordering = ["name"]
-        verbose_name = 'планета'  # название приложения в ед.
-        verbose_name_plural = 'планеты'  # название мн. числ.
+        verbose_name = 'planet'  # название приложения в ед.
+        verbose_name_plural = 'planets'  # название мн. числ.
 
     def __str__(self):
         return '%s' % self.name
